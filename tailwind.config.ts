@@ -52,16 +52,23 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
-				}
+				// Director Platform Cinema Colors
+				'studio-black': 'hsl(var(--studio-black))',
+				'studio-dark': 'hsl(var(--studio-dark))',
+				'studio-gray': 'hsl(var(--studio-gray))',
+				'studio-light': 'hsl(var(--studio-light))',
+				'studio-accent': 'hsl(var(--studio-accent))',
+				'director-gold': 'hsl(var(--director-gold))',
+				'director-gold-muted': 'hsl(var(--director-gold-muted))',
+				'director-gold-dark': 'hsl(var(--director-gold-dark))',
+				'cinema-red': 'hsl(var(--cinema-red))',
+				'cinema-red-dark': 'hsl(var(--cinema-red-dark))',
+				'cinema-blue': 'hsl(var(--cinema-blue))',
+				'cinema-blue-dark': 'hsl(var(--cinema-blue-dark))',
+				'audio-green': 'hsl(var(--audio-green))',
+				'audio-green-dark': 'hsl(var(--audio-green-dark))',
+				'image-purple': 'hsl(var(--image-purple))',
+				'image-purple-dark': 'hsl(var(--image-purple-dark))',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
