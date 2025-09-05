@@ -16,16 +16,16 @@ import {
   UserPlus,
   MessageSquare,
   Phone,
-  Monitor
+  Monitor,
+  X
 } from "lucide-react";
 
 interface RightToolbarProps {
-  isOpen: boolean;
-  onClose?: () => void;
+  activeSection: string | null;
+  onSectionChange: (section: string | null) => void;
 }
 
-export function RightToolbar({ isOpen }: RightToolbarProps) {
-  const [activeSection, setActiveSection] = useState("ai");
+export function RightToolbar({ activeSection, onSectionChange }: RightToolbarProps) {
   const [chatMessage, setChatMessage] = useState("");
 
   const sections = [
@@ -44,34 +44,27 @@ export function RightToolbar({ isOpen }: RightToolbarProps) {
     { id: 4, name: "David Kim", role: "Sound Designer", avatar: "/avatars/david.jpg", status: "offline" }
   ];
 
-  if (!isOpen) return null;
+  if (!activeSection) return null;
+
+  const currentSection = sections.find(s => s.id === activeSection);
+  if (!currentSection) return null;
 
   return (
     <div className="toolbar-panel h-full flex flex-col slide-in-right">
-      {/* Section Navigation */}
-      <div className="p-4 border-b border-studio-accent">
-        <div className="grid grid-cols-3 gap-1">
-          {sections.map((section) => {
-            const Icon = section.icon;
-            const isActive = activeSection === section.id;
-            
-            return (
-              <Button
-                key={section.id}
-                variant={isActive ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setActiveSection(section.id)}
-                className={`
-                  flex flex-col items-center p-2 h-auto
-                  ${isActive ? "bg-director-gold/20 text-director-gold" : "text-foreground/70"}
-                `}
-              >
-                <Icon className="w-4 h-4 mb-1" />
-                <span className="text-xs">{section.label}</span>
-              </Button>
-            );
-          })}
+      {/* Header with close button */}
+      <div className="p-4 border-b border-studio-accent flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <currentSection.icon className="w-5 h-5 text-director-gold" />
+          <h3 className="font-semibold">{currentSection.label}</h3>
         </div>
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={() => onSectionChange(null)}
+          className="h-8 w-8 p-0"
+        >
+          <X className="w-4 h-4" />
+        </Button>
       </div>
 
       {/* Active Section Content */}

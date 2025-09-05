@@ -15,16 +15,16 @@ import {
   Layers,
   Music,
   Filter,
-  Cpu
+  Cpu,
+  X
 } from "lucide-react";
 
 interface LeftToolbarProps {
-  isOpen: boolean;
-  onClose?: () => void;
+  activeSection: string | null;
+  onSectionChange: (section: string | null) => void;
 }
 
-export function LeftToolbar({ isOpen }: LeftToolbarProps) {
-  const [activeSection, setActiveSection] = useState("library");
+export function LeftToolbar({ activeSection, onSectionChange }: LeftToolbarProps) {
 
   const sections = [
     {
@@ -94,40 +94,33 @@ export function LeftToolbar({ isOpen }: LeftToolbarProps) {
     }
   ];
 
-  if (!isOpen) return null;
+  if (!activeSection) return null;
+
+  const currentSection = sections.find(s => s.id === activeSection);
+  if (!currentSection) return null;
 
   return (
     <div className="toolbar-panel h-full flex flex-col slide-in-left">
-      {/* Section Navigation */}
-      <div className="p-4 border-b border-studio-accent">
-        <div className="grid grid-cols-3 gap-1">
-          {sections.map((section) => {
-            const Icon = section.icon;
-            const isActive = activeSection === section.id;
-            
-            return (
-              <Button
-                key={section.id}
-                variant={isActive ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setActiveSection(section.id)}
-                className={`
-                  flex flex-col items-center p-2 h-auto
-                  ${isActive ? "bg-director-gold/20 text-director-gold" : "text-foreground/70"}
-                `}
-              >
-                <Icon className="w-4 h-4 mb-1" />
-                <span className="text-xs">{section.label}</span>
-              </Button>
-            );
-          })}
+      {/* Header with close button */}
+      <div className="p-4 border-b border-studio-accent flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <currentSection.icon className="w-5 h-5 text-director-gold" />
+          <h3 className="font-semibold">{currentSection.label}</h3>
         </div>
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={() => onSectionChange(null)}
+          className="h-8 w-8 p-0"
+        >
+          <X className="w-4 h-4" />
+        </Button>
       </div>
 
       {/* Active Section Content */}
       <ScrollArea className="flex-1">
         <div className="p-4 space-y-4">
-          {sections.find(s => s.id === activeSection)?.items.map((item) => {
+          {currentSection.items.map((item) => {
             const Icon = item.icon;
             
             return (
