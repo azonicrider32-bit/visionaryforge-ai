@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { LucidLogo } from "./LucidLogo";
 import { 
   Camera, 
   Image, 
@@ -9,7 +10,11 @@ import {
   Save,
   Upload,
   User,
-  Brain
+  Users,
+  Download,
+  Settings,
+  FolderOpen,
+  Share2
 } from "lucide-react";
 
 interface ClapperBarProps {
@@ -25,84 +30,81 @@ export function ClapperBar({
   onZenToggle,
   zenMode = false 
 }: ClapperBarProps) {
-  const modes = [
-    { id: "audio", label: "Audio", icon: AudioLines, color: "audio" },
-    { id: "image", label: "Image", icon: Image, color: "image" },
-    { id: "video", label: "Video", icon: Video, color: "cinema" },
-    { id: "record", label: "Record", icon: Camera, color: "record" },
+  
+  // Clapper board sections with angled design
+  const clapperSections = [
+    { label: "LUCID", color: "bg-[#000000]", textColor: "text-white", icon: null },
+    { label: "Audio", color: "bg-[#22c55e]", textColor: "text-black", icon: AudioLines, mode: "audio" },
+    { label: "Image", color: "bg-[#eab308]", textColor: "text-black", icon: Image, mode: "image" },
+    { label: "Video", color: "bg-[#3b82f6]", textColor: "text-white", icon: Video, mode: "video" },
+    { label: "Record", color: "bg-[#ef4444]", textColor: "text-white", icon: Camera, mode: "record" },
+    { label: "Community", color: "bg-[#ffffff]", textColor: "text-black", icon: Users },
+    { label: "Import", color: "bg-[#f3f4f6]", textColor: "text-black", icon: FolderOpen },
+    { label: "Export", color: "bg-[#9ca3af]", textColor: "text-black", icon: Upload },
+    { label: "Settings", color: "bg-[#374151]", textColor: "text-white", icon: Settings }
   ];
 
   return (
-    <div className="clapper-bar flex items-center justify-between px-6 py-3">
-      {/* Logo & Brand */}
-      <div className="flex items-center space-x-3">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gradient-to-r from-director-gold to-director-gold-dark rounded-lg flex items-center justify-center">
-            <Brain className="w-5 h-5 text-studio-black" />
-          </div>
-          <span className="text-xl font-bold bg-gradient-to-r from-director-gold to-director-gold-muted bg-clip-text text-transparent">
-            Director
-          </span>
-        </div>
-        <Badge variant="outline" className="text-director-gold border-director-gold/30">
-          FORGE
-        </Badge>
-      </div>
-
-      {/* Mode Buttons */}
-      <div className="flex items-center space-x-2">
-        {modes.map((mode) => {
-          const Icon = mode.icon;
-          const isActive = activeMode === mode.id;
+    <div className="clapper-bar relative overflow-hidden" style={{ 
+      background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%)',
+      boxShadow: '0 4px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'
+    }}>
+      {/* Clapper board sections */}
+      <div className="flex items-center h-16 relative">
+        {clapperSections.map((section, index) => {
+          const Icon = section.icon;
+          const isActive = section.mode && activeMode === section.mode;
+          const isFirst = index === 0;
           
           return (
-            <Button
-              key={mode.id}
-              variant={isActive ? (mode.color as any) : "ghost"}
-              size="sm"
-              onClick={() => onModeChange?.(mode.id)}
-              className={`transition-all duration-300 ${!isActive ? "text-foreground/70 hover:text-foreground" : ""}`}
+            <div
+              key={section.label}
+              className={`
+                relative h-full flex items-center justify-center px-4 cursor-pointer
+                transform transition-all duration-300 hover:scale-105
+                ${section.color} ${section.textColor}
+                ${isActive ? 'ring-2 ring-director-gold shadow-lg shadow-director-gold/30' : ''}
+                ${!isFirst ? 'clip-path-angled' : ''}
+              `}
+              style={{
+                minWidth: isFirst ? '120px' : '100px',
+                clipPath: !isFirst ? 'polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%)' : undefined,
+                marginLeft: !isFirst ? '-10px' : '0'
+              }}
+              onClick={() => {
+                if (section.mode) {
+                  onModeChange?.(section.mode);
+                } else if (section.label === "Settings") {
+                  onZenToggle?.();
+                }
+              }}
             >
-              <Icon className="w-4 h-4 mr-2" />
-              {mode.label}
-            </Button>
+              {isFirst ? (
+                <div className="flex items-center space-x-2">
+                  <LucidLogo className="w-6 h-6" />
+                  <span className="font-bold text-lg bg-gradient-to-r from-director-gold to-director-gold-muted bg-clip-text text-transparent">
+                    LUCID
+                  </span>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center space-y-1">
+                  {Icon && <Icon className="w-4 h-4" />}
+                  <span className="text-xs font-medium">{section.label}</span>
+                </div>
+              )}
+              
+              {/* Active indicator */}
+              {isActive && (
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-director-gold" />
+              )}
+            </div>
           );
         })}
       </div>
-
-      {/* Action Buttons */}
-      <div className="flex items-center space-x-2">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onZenToggle}
-          className={`
-            transition-all duration-300 
-            ${zenMode ? "bg-director-gold/20 text-director-gold" : "text-foreground/70 hover:text-foreground"}
-          `}
-        >
-          <Circle className="w-4 h-4 mr-2" />
-          🧘 Zen
-        </Button>
-        
-        <Button variant="ghost" size="sm" className="text-foreground/70 hover:text-foreground">
-          <Save className="w-4 h-4 mr-2" />
-          Save
-        </Button>
-        
-        <Button 
-          variant="director" 
-          size="sm"
-        >
-          <Upload className="w-4 h-4 mr-2" />
-          Export
-        </Button>
-        
-        <Button variant="outline" size="sm">
-          <User className="w-4 h-4 mr-2" />
-          Sign In
-        </Button>
-      </div>
+      
+      {/* Clapper hinge effect */}
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-zinc-600 via-zinc-400 to-zinc-600" />
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-zinc-800 via-zinc-600 to-zinc-800" />
     </div>
   );
 }
