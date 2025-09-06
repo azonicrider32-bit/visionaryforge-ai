@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ClapperBar } from "./ClapperBar";
 import { LeftToolbar } from "./LeftToolbar";
 import { RightToolbar } from "./RightToolbar";
-import { NodeWorkspace } from "./NodeWorkspace";
+import { MassiveNodeWorkspace } from "./MassiveNodeWorkspace";
 import { Timeline } from "./Timeline";
 import { Button } from "@/components/ui/button";
 import {
@@ -105,7 +105,7 @@ export function DirectorForge() {
         <div className="flex-1 flex flex-col">
           {/* Node Graph Workspace */}
           <div className="flex-1 relative">
-            <NodeWorkspace />
+            <MassiveNodeWorkspace />
             
             {/* Zen Mode Overlay */}
             {zenMode && (

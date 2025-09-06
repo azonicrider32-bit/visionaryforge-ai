@@ -31,17 +31,80 @@ export function ClapperBar({
   zenMode = false 
 }: ClapperBarProps) {
   
-  // Clapper board sections with angled design
-  const clapperSections = [
-    { label: "LUCID", color: "bg-[#000000]", textColor: "text-white", icon: null },
-    { label: "Audio", color: "bg-[#22c55e]", textColor: "text-black", icon: AudioLines, mode: "audio" },
-    { label: "Image", color: "bg-[#eab308]", textColor: "text-black", icon: Image, mode: "image" },
-    { label: "Video", color: "bg-[#3b82f6]", textColor: "text-white", icon: Video, mode: "video" },
-    { label: "Record", color: "bg-[#ef4444]", textColor: "text-white", icon: Camera, mode: "record" },
-    { label: "Community", color: "bg-[#ffffff]", textColor: "text-black", icon: Users },
-    { label: "Import", color: "bg-[#f3f4f6]", textColor: "text-black", icon: FolderOpen },
-    { label: "Export", color: "bg-[#9ca3af]", textColor: "text-black", icon: Upload },
-    { label: "Settings", color: "bg-[#374151]", textColor: "text-white", icon: Settings }
+  // Clapper board sections with angled design - responsive
+  const clapperButtons = [
+    { 
+      id: "lucid", 
+      label: "LUCID", 
+      color: "bg-[#000000]", 
+      textColor: "text-white", 
+      icon: Circle,
+      onClick: () => {}
+    },
+    { 
+      id: "audio", 
+      label: "Audio", 
+      color: "bg-[#22c55e]", 
+      textColor: "text-black", 
+      icon: AudioLines, 
+      onClick: () => onModeChange?.("audio")
+    },
+    { 
+      id: "image", 
+      label: "Image", 
+      color: "bg-[#eab308]", 
+      textColor: "text-black", 
+      icon: Image, 
+      onClick: () => onModeChange?.("image")
+    },
+    { 
+      id: "video", 
+      label: "Video", 
+      color: "bg-[#3b82f6]", 
+      textColor: "text-white", 
+      icon: Video, 
+      onClick: () => onModeChange?.("video")
+    },
+    { 
+      id: "record", 
+      label: "Record", 
+      color: "bg-[#ef4444]", 
+      textColor: "text-white", 
+      icon: Camera, 
+      onClick: () => onModeChange?.("record")
+    },
+    { 
+      id: "zen", 
+      label: "🧘Zen", 
+      color: "bg-[#ffffff]", 
+      textColor: "text-black", 
+      icon: Circle,
+      onClick: () => onZenToggle?.()
+    },
+    { 
+      id: "save", 
+      label: "Save", 
+      color: "bg-[#f3f4f6]", 
+      textColor: "text-black", 
+      icon: Save,
+      onClick: () => {}
+    },
+    { 
+      id: "export", 
+      label: "Export", 
+      color: "bg-[#9ca3af]", 
+      textColor: "text-black", 
+      icon: Download,
+      onClick: () => {}
+    },
+    { 
+      id: "signin", 
+      label: "SignIn", 
+      color: "bg-[#374151]", 
+      textColor: "text-white", 
+      icon: User,
+      onClick: () => {}
+    }
   ];
 
   return (
@@ -51,9 +114,9 @@ export function ClapperBar({
     }}>
       {/* Clapper board sections */}
       <div className="flex items-center h-16 relative">
-        {clapperSections.map((section, index) => {
-          const Icon = section.icon;
-          const isActive = section.mode && activeMode === section.mode;
+        {clapperButtons.map((button, index) => {
+          const Icon = button.icon;
+          const isActive = activeMode === button.id;
           const isFirst = index === 0;
           
           return (
