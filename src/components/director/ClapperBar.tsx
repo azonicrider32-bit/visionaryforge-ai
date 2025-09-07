@@ -121,11 +121,11 @@ export function ClapperBar({
           
           return (
             <div
-              key={section.label}
+              key={button.label}
               className={`
                 relative h-full flex items-center justify-center px-4 cursor-pointer
                 transform transition-all duration-300 hover:scale-105
-                ${section.color} ${section.textColor}
+                ${button.color} ${button.textColor}
                 ${isActive ? 'ring-2 ring-director-gold shadow-lg shadow-director-gold/30' : ''}
                 ${!isFirst ? 'clip-path-angled' : ''}
               `}
@@ -134,13 +134,7 @@ export function ClapperBar({
                 clipPath: !isFirst ? 'polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%)' : undefined,
                 marginLeft: !isFirst ? '-10px' : '0'
               }}
-              onClick={() => {
-                if (section.mode) {
-                  onModeChange?.(section.mode);
-                } else if (section.label === "Settings") {
-                  onZenToggle?.();
-                }
-              }}
+              onClick={button.onClick}
             >
               {isFirst ? (
                 <div className="flex items-center space-x-2">
@@ -152,7 +146,7 @@ export function ClapperBar({
               ) : (
                 <div className="flex flex-col items-center space-y-1">
                   {Icon && <Icon className="w-4 h-4" />}
-                  <span className="text-xs font-medium">{section.label}</span>
+                  <span className="text-xs font-medium">{button.label}</span>
                 </div>
               )}
               
