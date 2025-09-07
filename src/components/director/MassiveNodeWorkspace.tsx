@@ -38,42 +38,43 @@ import storyboardBriefingImg from '@/assets/storyboard-briefing.jpg';
 
 // Custom node types
 const NodeComponent = ({ data, selected }: any) => {
-  const getNodeStyle = (type: string) => {
-    const baseStyle = "p-3 rounded-lg border-2 shadow-lg transition-all duration-200 hover:scale-105 cursor-pointer backdrop-blur-sm";
+  const getNodeStyle = (type: string, isHighlighted: boolean = false) => {
+    const baseStyle = "p-3 rounded-xl border-2 shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer backdrop-blur-md relative overflow-hidden";
+    const highlightStyle = isHighlighted ? "ring-4 ring-yellow-400/60 ring-offset-2 ring-offset-transparent scale-110 z-50" : "";
     
     switch (type) {
       case 'script':
-        return `${baseStyle} bg-gradient-to-br from-blue-900/90 to-blue-700/90 text-white border-blue-400`;
+        return `${baseStyle} ${highlightStyle} bg-gradient-to-br from-blue-500/20 to-blue-700/30 text-white border-blue-400/50 shadow-blue-500/20`;
       case 'character':
-        return `${baseStyle} bg-gradient-to-br from-purple-900/90 to-purple-700/90 text-white border-purple-400`;
+        return `${baseStyle} ${highlightStyle} bg-gradient-to-br from-purple-500/20 to-purple-700/30 text-white border-purple-400/50 shadow-purple-500/20`;
       case 'environment':
       case 'scene':
-        return `${baseStyle} bg-gradient-to-br from-emerald-900/90 to-emerald-700/90 text-white border-emerald-400`;
+        return `${baseStyle} ${highlightStyle} bg-gradient-to-br from-emerald-500/20 to-emerald-700/30 text-white border-emerald-400/50 shadow-emerald-500/20`;
       case 'prop':
-        return `${baseStyle} bg-gradient-to-br from-amber-900/90 to-amber-700/90 text-white border-amber-400`;
+        return `${baseStyle} ${highlightStyle} bg-gradient-to-br from-amber-500/20 to-amber-700/30 text-white border-amber-400/50 shadow-amber-500/20`;
       case 'video':
-        return `${baseStyle} bg-gradient-to-br from-red-900/90 to-red-700/90 text-white border-red-400`;
+        return `${baseStyle} ${highlightStyle} bg-gradient-to-br from-red-500/20 to-red-700/30 text-white border-red-400/50 shadow-red-500/20`;
       case 'audio':
       case 'dialogue':
       case 'music':
       case 'sfx':
       case 'ambient':
-        return `${baseStyle} bg-gradient-to-br from-green-900/90 to-green-700/90 text-white border-green-400`;
+        return `${baseStyle} ${highlightStyle} bg-gradient-to-br from-green-500/20 to-green-700/30 text-white border-green-400/50 shadow-green-500/20`;
       case 'effect':
       case 'transition':
-        return `${baseStyle} bg-gradient-to-br from-orange-900/90 to-orange-700/90 text-white border-orange-400`;
+        return `${baseStyle} ${highlightStyle} bg-gradient-to-br from-orange-500/20 to-orange-700/30 text-white border-orange-400/50 shadow-orange-500/20`;
       case 'processing':
-        return `${baseStyle} bg-gradient-to-br from-violet-900/90 to-violet-700/90 text-white border-violet-400`;
+        return `${baseStyle} ${highlightStyle} bg-gradient-to-br from-violet-500/20 to-violet-700/30 text-white border-violet-400/50 shadow-violet-500/20`;
       case 'finalcut':
-        return `${baseStyle} bg-gradient-to-br from-cyan-900/90 to-cyan-700/90 text-white border-cyan-400`;
+        return `${baseStyle} ${highlightStyle} bg-gradient-to-br from-cyan-500/20 to-cyan-700/30 text-white border-cyan-400/50 shadow-cyan-500/20`;
       case 'master-timeline':
-        return `${baseStyle} bg-gradient-to-r from-slate-900/95 via-slate-800/95 to-slate-900/95 text-white border-slate-400 shadow-2xl`;
+        return `${baseStyle} ${highlightStyle} bg-gradient-to-r from-slate-700/30 via-slate-600/40 to-slate-700/30 text-white border-slate-300/60 shadow-2xl shadow-slate-500/30`;
       case 'storyboard':
-        return `${baseStyle} bg-gradient-to-br from-pink-900/90 to-pink-700/90 text-white border-pink-400`;
+        return `${baseStyle} ${highlightStyle} bg-gradient-to-br from-pink-500/20 to-pink-700/30 text-white border-pink-400/50 shadow-pink-500/20`;
       case 'timeline-section':
-        return `${baseStyle} bg-gradient-to-br from-indigo-900/90 to-indigo-700/90 text-white border-indigo-400`;
+        return `${baseStyle} ${highlightStyle} bg-gradient-to-br from-indigo-500/20 to-indigo-700/30 text-white border-indigo-400/50 shadow-indigo-500/20`;
       default:
-        return `${baseStyle} bg-slate-900/90 text-white border-slate-600`;
+        return `${baseStyle} ${highlightStyle} bg-slate-700/20 text-white border-slate-400/50 shadow-slate-500/20`;
     }
   };
 
@@ -97,33 +98,45 @@ const NodeComponent = ({ data, selected }: any) => {
 
   const Icon = getIcon(data.type);
 
+  const isHighlighted = data.isHighlighted || false;
+
   return (
-    <div className={getNodeStyle(data.type)} style={{ minWidth: data.type === 'master-timeline' ? '800px' : data.type === 'timeline-section' ? '120px' : '180px', minHeight: data.type === 'master-timeline' ? '120px' : '100px' }}>
-      <div className="flex items-start gap-2">
-        <Icon className="w-4 h-4 flex-shrink-0 mt-0.5" />
+    <div 
+      className={getNodeStyle(data.type, isHighlighted)} 
+      style={{ 
+        minWidth: data.type === 'master-timeline' ? '800px' : data.type === 'timeline-section' ? '120px' : '180px', 
+        minHeight: data.type === 'master-timeline' ? '120px' : '100px' 
+      }}
+      onClick={() => data.onClick?.(data.id)}
+    >
+      {/* Animated gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-50 pointer-events-none" />
+      
+      <div className="relative flex items-start gap-2">
+        <Icon className="w-4 h-4 flex-shrink-0 mt-0.5 opacity-90" />
         <div className="flex-1 min-w-0">
-          <div className="font-semibold text-xs mb-1 truncate">{data.label}</div>
+          <div className="font-semibold text-xs mb-1 truncate text-white">{data.label}</div>
           {data.preview && (
             <img 
               src={data.preview} 
               alt={data.label} 
-              className="w-full h-16 object-cover rounded border mb-1" 
+              className="w-full h-16 object-cover rounded border border-white/20 mb-1 shadow-lg" 
             />
           )}
           {data.description && (
-            <div className="text-xs opacity-80 mb-1 line-clamp-2">{data.description}</div>
+            <div className="text-xs opacity-90 mb-1 line-clamp-2 text-gray-100">{data.description}</div>
           )}
           <div className="flex flex-wrap gap-1">
             {data.aiModel && (
-              <Badge variant="secondary" className="text-xs px-1 py-0 bg-black/20">{data.aiModel}</Badge>
+              <Badge variant="secondary" className="text-xs px-1 py-0 bg-black/40 text-white border-white/20">{data.aiModel}</Badge>
             )}
             {data.duration && (
-              <Badge variant="outline" className="text-xs px-1 py-0 border-white/20">{data.duration}</Badge>
+              <Badge variant="outline" className="text-xs px-1 py-0 border-white/30 text-white bg-white/10">{data.duration}</Badge>
             )}
             {data.status && (
               <Badge 
                 variant={data.status === 'ready' ? 'default' : data.status === 'generating' ? 'destructive' : 'secondary'}
-                className="text-xs px-1 py-0 bg-black/30"
+                className="text-xs px-1 py-0 bg-black/40 text-white border-white/20"
               >
                 {data.status}
               </Badge>
@@ -448,10 +461,31 @@ export function MassiveNodeWorkspace() {
         .filter(edge => edge.target === node.id || edge.source === node.id)
         .map(edge => edge.source === node.id ? edge.target : edge.source);
       setHighlightedNodes(connectedNodes);
+      
+      // Update nodes to show highlight state
+      setNodes(currentNodes => 
+        currentNodes.map(n => ({
+          ...n,
+          data: {
+            ...n.data,
+            isHighlighted: connectedNodes.includes(n.id) || n.id === node.id
+          }
+        }))
+      );
     } else {
       setHighlightedNodes([]);
+      // Clear all highlights
+      setNodes(currentNodes => 
+        currentNodes.map(n => ({
+          ...n,
+          data: {
+            ...n.data,
+            isHighlighted: false
+          }
+        }))
+      );
     }
-  }, [edges]);
+  }, [edges, setNodes]);
 
   const nodeTypes = {
     default: NodeComponent,
@@ -471,7 +505,7 @@ export function MassiveNodeWorkspace() {
         }}
       />
 
-      <ReactFlow
+        <ReactFlow
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
@@ -481,6 +515,15 @@ export function MassiveNodeWorkspace() {
         nodeTypes={nodeTypes}
         fitView
         className="bg-transparent"
+        defaultEdgeOptions={{
+          type: 'smoothstep',
+          style: { stroke: '#60a5fa', strokeWidth: 2 },
+          markerEnd: {
+            type: 'arrowclosed',
+            color: '#60a5fa',
+          },
+        }}
+        connectionLineStyle={{ stroke: '#60a5fa', strokeWidth: 2 }}
       >
         <Controls className="bg-slate-900/90 border-slate-700" />
         <MiniMap 
