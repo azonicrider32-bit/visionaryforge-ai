@@ -113,7 +113,7 @@ export function ClapperBar({
       boxShadow: '0 4px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'
     }}>
       {/* Clapper board sections */}
-      <div className="flex items-center h-16 relative">
+      <div className="flex items-center h-16 relative w-full">
         {clapperButtons.map((button, index) => {
           const Icon = button.icon;
           const isActive = activeMode === button.id;
@@ -123,30 +123,30 @@ export function ClapperBar({
             <div
               key={button.label}
               className={`
-                relative h-full flex items-center justify-center px-4 cursor-pointer
+                relative h-full flex items-center justify-center cursor-pointer flex-1
                 transform transition-all duration-300 hover:scale-105
                 ${button.color} ${button.textColor}
                 ${isActive ? 'ring-2 ring-director-gold shadow-lg shadow-director-gold/30' : ''}
                 ${!isFirst ? 'clip-path-angled' : ''}
               `}
               style={{
-                minWidth: isFirst ? '120px' : '100px',
-                clipPath: !isFirst ? 'polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%)' : undefined,
-                marginLeft: !isFirst ? '-10px' : '0'
+                minWidth: isFirst ? '140px' : '80px',
+                clipPath: !isFirst ? 'polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%)' : undefined,
+                marginLeft: !isFirst ? '-12px' : '0'
               }}
               onClick={button.onClick}
             >
               {isFirst ? (
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 px-4">
                   <LucidLogo className="w-6 h-6" />
-                  <span className="font-bold text-lg bg-gradient-to-r from-director-gold to-director-gold-muted bg-clip-text text-transparent">
+                  <span className="font-bold text-lg bg-gradient-to-r from-director-gold to-director-gold-muted bg-clip-text text-transparent hidden sm:block">
                     LUCID
                   </span>
                 </div>
               ) : (
-                <div className="flex flex-col items-center space-y-1">
+                <div className="flex flex-col items-center space-y-1 px-2">
                   {Icon && <Icon className="w-4 h-4" />}
-                  <span className="text-xs font-medium">{button.label}</span>
+                  <span className="text-xs font-medium hidden lg:block">{button.label}</span>
                 </div>
               )}
               
