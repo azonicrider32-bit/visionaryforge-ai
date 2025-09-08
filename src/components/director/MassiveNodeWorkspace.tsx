@@ -39,7 +39,7 @@ import storyboardBriefingImg from '@/assets/storyboard-briefing.jpg';
 // Custom node types
 const NodeComponent = ({ data, selected }: any) => {
   const getNodeStyle = (type: string, isHighlighted: boolean = false) => {
-    const baseStyle = "p-3 rounded-xl border-2 shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer backdrop-blur-md relative overflow-hidden";
+    const baseStyle = "!bg-transparent p-3 rounded-xl border-2 shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer backdrop-blur-md relative overflow-hidden";
     const highlightStyle = isHighlighted ? "ring-4 ring-yellow-400/60 ring-offset-2 ring-offset-transparent scale-110 z-50" : "";
     
     switch (type) {
@@ -146,6 +146,13 @@ const NodeComponent = ({ data, selected }: any) => {
       </div>
     </div>
   );
+};
+
+// Define node types BEFORE the component
+const nodeTypes = {
+  default: NodeComponent,
+  input: NodeComponent,
+  output: NodeComponent,
 };
 
 export function MassiveNodeWorkspace() {
@@ -517,13 +524,13 @@ export function MassiveNodeWorkspace() {
         className="bg-transparent"
         defaultEdgeOptions={{
           type: 'smoothstep',
-          style: { stroke: '#60a5fa', strokeWidth: 2 },
+          style: { stroke: '#60a5fa', strokeWidth: 3 },
           markerEnd: {
             type: 'arrowclosed',
             color: '#60a5fa',
           },
         }}
-        connectionLineStyle={{ stroke: '#60a5fa', strokeWidth: 2 }}
+        connectionLineStyle={{ stroke: '#60a5fa', strokeWidth: 3 }}
       >
         <Controls className="bg-slate-900/90 border-slate-700" />
         <MiniMap 
