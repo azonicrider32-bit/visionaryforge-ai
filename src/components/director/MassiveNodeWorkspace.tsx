@@ -10,7 +10,9 @@ import {
   Connection,
   Edge,
   Node,
-  BackgroundVariant
+  BackgroundVariant,
+  Handle,
+  Position
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -105,10 +107,24 @@ const NodeComponent = ({ data, selected }: any) => {
       className={getNodeStyle(data.type, isHighlighted)} 
       style={{ 
         minWidth: data.type === 'master-timeline' ? '800px' : data.type === 'timeline-section' ? '120px' : '180px', 
-        minHeight: data.type === 'master-timeline' ? '120px' : '100px' 
+        minHeight: data.type === 'master-timeline' ? '120px' : '100px',
+        background: 'transparent !important',
+        backgroundColor: 'transparent !important'
       }}
       onClick={() => data.onClick?.(data.id)}
     >
+      {/* Connection handles */}
+      <Handle 
+        type="target" 
+        position={Position.Left} 
+        style={{ background: '#60a5fa', border: '2px solid #1e40af' }}
+      />
+      <Handle 
+        type="source" 
+        position={Position.Right} 
+        style={{ background: '#60a5fa', border: '2px solid #1e40af' }}
+      />
+      
       {/* Animated gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-50 pointer-events-none" />
       
@@ -521,7 +537,7 @@ export function MassiveNodeWorkspace() {
         onNodeClick={onNodeClick}
         nodeTypes={nodeTypes}
         fitView
-        className="bg-transparent"
+        className="bg-transparent [&_.react-flow__node]:!bg-transparent [&_.react-flow__node]:!shadow-none"
         defaultEdgeOptions={{
           type: 'smoothstep',
           style: { stroke: '#60a5fa', strokeWidth: 3 },
