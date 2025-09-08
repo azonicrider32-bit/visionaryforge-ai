@@ -38,10 +38,10 @@ import storyboardOpeningImg from '@/assets/storyboard-opening.jpg';
 import storyboardDiscoveryImg from '@/assets/storyboard-discovery.jpg';
 import storyboardBriefingImg from '@/assets/storyboard-briefing.jpg';
 
-// Custom node types
+// Custom node types with aggressive background removal
 const NodeComponent = ({ data, selected }: any) => {
   const getNodeStyle = (type: string, isHighlighted: boolean = false) => {
-    const baseStyle = "!bg-transparent p-3 rounded-xl border-2 shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer backdrop-blur-md relative overflow-hidden";
+    const baseStyle = "!bg-transparent p-3 rounded-xl border-2 shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer backdrop-blur-md relative overflow-hidden [&>*]:!bg-transparent";
     const highlightStyle = isHighlighted ? "ring-4 ring-yellow-400/60 ring-offset-2 ring-offset-transparent scale-110 z-50" : "";
     
     switch (type) {
@@ -431,42 +431,82 @@ export function MassiveNodeWorkspace() {
 
   // Massive edge connections showing proper workflow
   const initialEdges: Edge[] = [
-    // Storyboard to script connections
-    { id: 'storyboard-to-script-1', source: 'storyboard-opening-rain', target: 'scene-01-opening', type: 'straight' },
-    { id: 'storyboard-to-script-2', source: 'storyboard-murder-discovery', target: 'scene-02-murder', type: 'straight' },
-    { id: 'storyboard-to-script-3', source: 'storyboard-briefing-room', target: 'scene-03-briefing', type: 'straight' },
+    // Storyboard to script connections (many more)
+    { id: 'sb-to-script-1', source: 'storyboard-opening-rain', target: 'scene-01-opening' },
+    { id: 'sb-to-script-2', source: 'storyboard-murder-discovery', target: 'scene-02-murder' },
+    { id: 'sb-to-script-3', source: 'storyboard-briefing-room', target: 'scene-03-briefing' },
+    { id: 'sb-to-script-4', source: 'storyboard-first-clue', target: 'scene-04-first-clue' },
+    { id: 'sb-to-script-5', source: 'storyboard-chase-begin', target: 'scene-05-chase' },
+    { id: 'sb-to-script-6', source: 'storyboard-underground-meet', target: 'scene-06-ghost-meet' },
+    { id: 'sb-to-script-7', source: 'storyboard-server-room', target: 'scene-07-infiltration' },
+    { id: 'sb-to-script-8', source: 'storyboard-revelation', target: 'scene-08-revelation' },
+    { id: 'sb-to-script-9', source: 'storyboard-rooftop-fight', target: 'scene-09-final-chase' },
+    { id: 'sb-to-script-10', source: 'storyboard-dawn-break', target: 'scene-10-confrontation' },
 
-    // Script to character connections
-    { id: 'script-to-char-1', source: 'master-script', target: 'char-neo-kane', type: 'straight' },
-    { id: 'script-to-char-2', source: 'master-script', target: 'char-aria-ai', type: 'straight' },
-    { id: 'script-to-char-3', source: 'master-script', target: 'char-viktor-villain', type: 'straight' },
-    { id: 'script-to-char-4', source: 'master-script', target: 'char-ghost-hacker', type: 'straight' },
+    // Script to character connections (multiple)
+    { id: 'script-to-char-1', source: 'master-script', target: 'char-neo-kane' },
+    { id: 'script-to-char-2', source: 'master-script', target: 'char-aria-ai' },
+    { id: 'script-to-char-3', source: 'master-script', target: 'char-viktor-villain' },
+    { id: 'script-to-char-4', source: 'master-script', target: 'char-ghost-hacker' },
+    { id: 'script-to-char-5', source: 'script-act1', target: 'char-neo-kane' },
+    { id: 'script-to-char-6', source: 'script-act1', target: 'char-dr-chen' },
+    { id: 'script-to-char-7', source: 'script-act2a', target: 'char-ghost-hacker' },
+    { id: 'script-to-char-8', source: 'script-act3', target: 'char-viktor-villain' },
 
-    // Script to environment connections
-    { id: 'script-to-env-1', source: 'scene-01-opening', target: 'env-neo-apartment', type: 'straight' },
-    { id: 'script-to-env-2', source: 'scene-02-murder', target: 'env-neon-alley', type: 'straight' },
-    { id: 'script-to-env-3', source: 'scene-03-briefing', target: 'env-police-station', type: 'straight' },
+    // Script to environment connections (many)
+    { id: 'scene-to-env-1', source: 'scene-01-opening', target: 'env-neo-apartment' },
+    { id: 'scene-to-env-2', source: 'scene-02-murder', target: 'env-neon-alley' },
+    { id: 'scene-to-env-3', source: 'scene-03-briefing', target: 'env-police-station' },
+    { id: 'scene-to-env-4', source: 'scene-05-chase', target: 'env-cyber-street' },
+    { id: 'scene-to-env-5', source: 'scene-06-ghost-meet', target: 'env-underground-club' },
+    { id: 'scene-to-env-6', source: 'scene-07-infiltration', target: 'env-corporate-tower' },
+    { id: 'scene-to-env-7', source: 'scene-08-revelation', target: 'env-server-room' },
+    { id: 'scene-to-env-8', source: 'scene-10-confrontation', target: 'env-tower-rooftop' },
 
-    // Character and environment to scene composition
-    { id: 'char-env-to-scene-1', source: 'char-neo-kane', target: 'scene-comp-opening', type: 'straight' },
-    { id: 'char-env-to-scene-2', source: 'env-neo-apartment', target: 'scene-comp-opening', type: 'straight' },
-    { id: 'char-env-to-scene-3', source: 'prop-rain-coat', target: 'scene-comp-opening', type: 'straight' },
+    // Character and environment to scene composition (complex web)
+    { id: 'char-to-scene-1', source: 'char-neo-kane', target: 'scene-comp-opening' },
+    { id: 'env-to-scene-1', source: 'env-neo-apartment', target: 'scene-comp-opening' },
+    { id: 'prop-to-scene-1', source: 'prop-rain-coat', target: 'scene-comp-opening' },
+    { id: 'char-to-scene-2', source: 'char-neo-kane', target: 'scene-comp-discovery' },
+    { id: 'char-to-scene-3', source: 'char-dr-chen', target: 'scene-comp-discovery' },
+    { id: 'env-to-scene-2', source: 'env-neon-alley', target: 'scene-comp-discovery' },
+    { id: 'char-to-scene-4', source: 'char-neo-kane', target: 'scene-comp-briefing' },
+    { id: 'char-to-scene-5', source: 'char-aria-ai', target: 'scene-comp-briefing' },
+    { id: 'env-to-scene-3', source: 'env-police-station', target: 'scene-comp-briefing' },
 
-    // Scene composition to video
-    { id: 'scene-to-video-1', source: 'scene-comp-opening', target: 'video-seq-001', type: 'straight' },
-    { id: 'scene-to-video-2', source: 'scene-comp-discovery', target: 'video-seq-002', type: 'straight' },
-    { id: 'scene-to-video-3', source: 'scene-comp-briefing', target: 'video-seq-003', type: 'straight' },
+    // Scene composition to video (direct connections)
+    { id: 'scene-to-vid-1', source: 'scene-comp-opening', target: 'video-seq-001' },
+    { id: 'scene-to-vid-2', source: 'scene-comp-discovery', target: 'video-seq-002' },
+    { id: 'scene-to-vid-3', source: 'scene-comp-briefing', target: 'video-seq-003' },
+    { id: 'scene-to-vid-4', source: 'scene-comp-chase', target: 'video-seq-004' },
+    { id: 'scene-to-vid-5', source: 'scene-comp-hacker-meet', target: 'video-seq-005' },
+    { id: 'scene-to-vid-6', source: 'scene-comp-infiltration', target: 'video-seq-006' },
+    { id: 'scene-to-vid-7', source: 'scene-comp-revelation', target: 'video-seq-007' },
+    { id: 'scene-to-vid-8', source: 'scene-comp-final-fight', target: 'video-seq-008' },
 
-    // Video sequences to timeline sections
-    { id: 'video-to-timeline-1', source: 'video-seq-001', target: 'timeline-act1', type: 'straight' },
-    { id: 'video-to-timeline-2', source: 'video-seq-002', target: 'timeline-act1', type: 'straight' },
-    { id: 'video-to-timeline-3', source: 'video-seq-003', target: 'timeline-act1', type: 'straight' },
+    // Video sequences to timeline sections (organized flow)
+    { id: 'vid-to-timeline-1', source: 'video-seq-001', target: 'timeline-act1' },
+    { id: 'vid-to-timeline-2', source: 'video-seq-002', target: 'timeline-act1' },
+    { id: 'vid-to-timeline-3', source: 'video-seq-003', target: 'timeline-act1' },
+    { id: 'vid-to-timeline-4', source: 'video-seq-004', target: 'timeline-act2a' },
+    { id: 'vid-to-timeline-5', source: 'video-seq-005', target: 'timeline-act2a' },
+    { id: 'vid-to-timeline-6', source: 'video-seq-006', target: 'timeline-act2b' },
+    { id: 'vid-to-timeline-7', source: 'video-seq-007', target: 'timeline-act2b' },
+    { id: 'vid-to-timeline-8', source: 'video-seq-008', target: 'timeline-act3' },
+    { id: 'vid-to-timeline-9', source: 'video-seq-009', target: 'timeline-act3' },
+    { id: 'vid-to-timeline-10', source: 'video-seq-010', target: 'timeline-act3' },
 
-    // Timeline sections to master timeline
-    { id: 'timeline-to-master-1', source: 'timeline-act1', target: 'master-timeline', type: 'straight' },
-    { id: 'timeline-to-master-2', source: 'timeline-act2a', target: 'master-timeline', type: 'straight' },
-    { id: 'timeline-to-master-3', source: 'timeline-act2b', target: 'master-timeline', type: 'straight' },
-    { id: 'timeline-to-master-4', source: 'timeline-act3', target: 'master-timeline', type: 'straight' },
+    // Timeline sections to master timeline (final assembly)
+    { id: 'timeline-to-master-1', source: 'timeline-act1', target: 'master-timeline' },
+    { id: 'timeline-to-master-2', source: 'timeline-act2a', target: 'master-timeline' },
+    { id: 'timeline-to-master-3', source: 'timeline-act2b', target: 'master-timeline' },
+    { id: 'timeline-to-master-4', source: 'timeline-act3', target: 'master-timeline' },
+
+    // Audio connections (spanning multiple elements)
+    { id: 'audio-to-vid-1', source: 'audio-dialogue-neo', target: 'video-seq-001' },
+    { id: 'audio-to-vid-2', source: 'audio-music-tension', target: 'video-seq-002' },
+    { id: 'audio-to-vid-3', source: 'audio-sfx-rain', target: 'video-seq-001' },
+    { id: 'audio-to-vid-4', source: 'audio-ambient-city', target: 'video-seq-004' },
   ];
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -537,7 +577,8 @@ export function MassiveNodeWorkspace() {
         onNodeClick={onNodeClick}
         nodeTypes={nodeTypes}
         fitView
-        className="bg-transparent [&_.react-flow__node]:!bg-transparent [&_.react-flow__node]:!shadow-none"
+        className="bg-transparent [&_.react-flow__node]:!bg-transparent [&_.react-flow__node]:!shadow-none [&_.react-flow__node>div]:!bg-transparent [&_.react-flow__node>div>div]:!bg-transparent"
+        style={{ backgroundColor: 'transparent' }}
         defaultEdgeOptions={{
           type: 'smoothstep',
           style: { stroke: '#60a5fa', strokeWidth: 3 },
